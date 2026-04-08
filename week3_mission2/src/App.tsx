@@ -2,14 +2,14 @@ import './App.css';
 import MoviePage from "./pages/MoviePage.tsx";
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import NotFoundPage from "./pages/NotFoundPage.tsx";
-import HomePage from "./pages/HomePage.tsx";
 import MovieDetailPage from "./pages/MovieDetailPage.tsx";
+import Layout from "./layout/Layout.tsx";
 
 //라우터 설정
 const router = createBrowserRouter ([
     {
         path: '/', //홈
-        element: <HomePage />,
+        element: <Layout />,
         errorElement: <NotFoundPage />,
         children : [
             {
