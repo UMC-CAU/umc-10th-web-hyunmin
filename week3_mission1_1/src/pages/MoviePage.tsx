@@ -8,7 +8,7 @@ export default function MoviePage() {
     useEffect(()=> {
         const fetchMovies = async() => {
             const {data} = await axios.get<MovieResponse> ( //axios.get<타입> : 응답 데이터 타입을 지정
-                'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc',
+                'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=ko-KO&page=1&sort_by=popularity.desc',
                 {
                     headers: {
                         Authorization: `Bearer ${import.meta.env.VITE_TMDB_KEY}`,
