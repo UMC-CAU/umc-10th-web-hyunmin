@@ -23,7 +23,7 @@ export default function LoginPage() {
         try {
             const data = await login(values.email, values.password); //로그인 API
 
-            localStorage.setItem("accessToken", data.accessToken); //accessToken 저장
+            localStorage.setItem("accessToken", data.data.accessToken); //accessToken 저장
             console.log(data);
 
             navigate("/"); //홈으로 이동
