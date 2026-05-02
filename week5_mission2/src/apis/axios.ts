@@ -5,7 +5,7 @@ const instance = axios.create({
   withCredentials: true,
 });
 
-// 요청 인터셉터 (accessToken 붙이기)
+//요청 인터셉터 (accessToken 붙이기)
 instance.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
 
@@ -16,11 +16,11 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
-// 🔥 무한루프 방지용 플래그
+//무한루프 방지용 플래그
 let isRefreshing = false;
 let failedQueue: any[] = [];
 
-// 실패 요청 처리 함수
+//실패 요청 처리 함수
 const processQueue = (error: any, token: string | null = null) => {
   failedQueue.forEach((prom) => {
     if (error) {
@@ -33,17 +33,17 @@ const processQueue = (error: any, token: string | null = null) => {
   failedQueue = [];
 };
 
-// 응답 인터셉터 (핵심)
+//응답 인터셉터
 instance.interceptors.response.use(
   (res) => res,
   async (err) => {
     const originalRequest = err.config;
 
-    // 401 + 재시도 안한 요청이면
+    //401요청이면
     if (err.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      // 이미 refresh 중이면 대기
+      //이미 refresh 중이면 대기
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
@@ -55,7 +55,7 @@ instance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // 🔥 refresh API 호출
+        //refresh API 호출
         const res = await axios.post(
           "http://localhost:8000/v1/auth/refresh",
           {refresh: localStorage.getItem("refreshToken")},
@@ -65,17 +65,16 @@ instance.interceptors.response.use(
         const newAccessToken = res.data.data.accessToken;
         const newRefreshToken = res.data.data.refreshToken;
 
-        // 저장
+        //토큰 저장
         localStorage.setItem("accessToken", newAccessToken);
         localStorage.setItem("refreshToken", newRefreshToken);
 
-        // 헤더 갱신
         instance.defaults.headers.common.Authorization =
           `Bearer ${newAccessToken}`;
 
         processQueue(null, newAccessToken);
 
-        // 원래 요청 재시도
+        //원래 요청 재시도
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return instance(originalRequest);
       } catch (refreshError) {
