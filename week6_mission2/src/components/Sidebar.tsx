@@ -1,0 +1,53 @@
+import { Link } from "react-router-dom";
+
+type SidebarProps = {
+    isOpen: boolean;
+    onClose: () => void;
+};
+
+export default function Sidebar({
+                                    isOpen,
+                                    onClose,
+                                }: SidebarProps) {
+    return (
+        <>
+            {/*모바일 오버레이*/}
+            {isOpen && (
+                <div
+                    onClick={onClose}
+                    className="fixed inset-0 bg-black/40 z-40 md:hidden"
+                />
+            )}
+
+            <aside
+                className={`
+                    fixed md:static top-0 left-0 z-50
+                    w-64 h-screen bg-white shadow-lg
+                    transform transition-transform duration-300
+                    ${isOpen ? "translate-x-0" : "-translate-x-full"}
+                    md:translate-x-0
+                `}
+            >
+                <div className="p-6 text-xl font-bold border-b">
+                    메뉴
+                </div>
+
+                <nav className="flex flex-col p-4 gap-3">
+                    <Link
+                        to="/lps"
+                        className="hover:bg-gray-100 p-2 rounded-lg"
+                    >
+                        홈
+                    </Link>
+
+                    <Link
+                        to="/mypage"
+                        className="hover:bg-gray-100 p-2 rounded-lg"
+                    >
+                        마이페이지
+                    </Link>
+                </nav>
+            </aside>
+        </>
+    );
+}
