@@ -39,7 +39,7 @@ export default function LoginPage() {
             //사용자 이름 저장
             localStorage.setItem("userName", res?.data?.name);
 
-            alert("로그인 성공!");
+            alert("로그인 성공");
             const from = location.state?.from?.pathname || "/";
             navigate(from, { replace: true });
         } catch (error: any) {
