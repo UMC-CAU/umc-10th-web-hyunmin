@@ -20,7 +20,7 @@ export default function LPModal({
     const addTag = () => {
         if (!tagInput.trim()) return;
 
-        setTags((prev) => [...prev, tagInput]);
+        setTags((prev) => [...prev, tagInput]); //원래 있던 배열에서 새 배열(새로운거 추가했으니까)
         setTagInput("");
     };
 
@@ -31,7 +31,7 @@ export default function LPModal({
     };
 
     const handleSubmit = () => {
-        const formData = new FormData();
+        const formData = new FormData(); //일반 JSON으로는 파일 업로드가 불가능하기 때문에 FormData 사용
 
         formData.append("title", title);
         formData.append("content", content);
@@ -44,17 +44,20 @@ export default function LPModal({
             formData.append("tags", tag);
         });
 
+        //LP 생성은 서버 데이터를 변경하는 작업이므로 useMutation
         createLPMutation.mutate(formData);
     };
 
     return (
         <div
+            //오버레이:모달 뒤에 깔리는 검은 반투명 배경
             className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
-            onClick={onClose}
+            onClick={onClose} //오버레이 영역 클릭하면 모달 닫히게
         >
             <div
                 className="bg-white p-6 rounded-2xl w-[400px]"
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation()} //내부 클릭하면 모달 닫히지 않게
+                //(클릭이벤트는 부모까지 전파됨. 모달 내부 클릭도 overlay까지 전달되면 모달이 닫혀버림 그래서 stopPropagation로 내부는 안닫히게
             >
                 <div className="flex justify-between mb-4">
                     <h2 className="text-xl font-bold">
@@ -85,7 +88,7 @@ export default function LPModal({
                 />
 
                 <input
-                    type="file"
+                    type="file" //lp이미지 업로드 가능하게(파일 입력창)
                     onChange={(e) => {
                         if (e.target.files?.[0]) {
                             setThumbnail(

@@ -34,6 +34,7 @@ export const useUpdateCommentMutation = (
             commentId: number;
             content: string;
         }) =>
+            //특정 댓글 내용 수정 API 호출
             updateComment(lpId, commentId, content),
 
         onSuccess: () => {
@@ -52,6 +53,7 @@ export const useDeleteCommentMutation = (
 
     return useMutation({
         mutationFn: (commentId: number) =>
+            //특정 댓글 삭제 API 호출
             deleteComment(lpId, commentId),
 
         onSuccess: () => {

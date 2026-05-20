@@ -13,6 +13,7 @@ export default function MyPage() {
 
     const saveProfile = async () => {
         try {
+            //사용자 정보 수정(기존 데이터 일부 수정이므로 PATCH)
             await instance.patch("/v1/users", {
                 name,
                 bio,

@@ -55,7 +55,7 @@ export default function LPDetailPage() {
         useUpdateLPMutation(lpid || "");
 
     const deleteLPMutation =
-        useDeleteLPMutation();
+        useDeleteLPMutation(); //LP 삭제 API 호출
 
     //LP 상세
     const {
@@ -78,9 +78,10 @@ export default function LPDetailPage() {
     const observerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        //스크롤이 observer 영역에 도달했는지 감지
         const observer = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting && hasNextPage) {
-                fetchNextPage();
+                fetchNextPage(); //스크롤 끝 도달하면 자동으로 다음 댓글 데이터 요청
             }
         });
 
@@ -174,7 +175,7 @@ export default function LPDetailPage() {
 
                     <button
                         onClick={() =>
-                            likeMutation.mutate()
+                            likeMutation.mutate() //좋아요 추가는 서버 상태 변경 작업이므로 mutation
                         }
                         className="px-4 py-2 bg-pink-500 text-white rounded-lg"
                     >
@@ -207,7 +208,7 @@ export default function LPDetailPage() {
 
                         <button
                             onClick={() => {
-                                updateLPMutation.mutate({
+                                updateLPMutation.mutate({ //lp 수정 수정 데이터를 서버로 보내는 요청 시작
                                     title: editTitle,
                                     content: editLPContent,
                                     thumbnail: lp.thumbnail,
@@ -253,6 +254,7 @@ export default function LPDetailPage() {
 
                     <button
                         onClick={() => {
+                            //댓글 작성은 서버 상태 변경 작업이므로 mutation
                             commentMutation.mutate(
                                 comment
                             );
@@ -319,8 +321,7 @@ export default function LPDetailPage() {
                                         </p>
 
                                         {/*본인 댓글만 수정 삭제 가능*/}
-                                        {comment.author
-                                                .name ===
+                                        {comment.author.name ===
                                             myName && (
                                                 <div className="flex gap-2">
                                                     <button

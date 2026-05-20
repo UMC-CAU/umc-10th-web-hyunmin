@@ -48,7 +48,7 @@ export default function Layout({
 
             {/*플로팅 버튼*/}
             <button
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => setIsModalOpen(true)} //우측 하단 플로팅 버튼 클릭 시 모달 상태를 true로 변경하여 LP 작성 모달 표시
                 className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-pink-500 text-white text-3xl shadow-lg hover:scale-110 transition-all"
             >
                 +
@@ -56,7 +56,7 @@ export default function Layout({
 
             {isModalOpen && (
                 <LPModal
-                    onClose={() => setIsModalOpen(false)}
+                    onClose={() => setIsModalOpen(false)} //모달이 열려 있을 때만 렌더링되도록
                 />
             )}
         </div>

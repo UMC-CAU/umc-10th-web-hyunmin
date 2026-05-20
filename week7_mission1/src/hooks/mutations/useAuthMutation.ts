@@ -3,6 +3,7 @@ import { login, deleteUser } from "../../apis/auth";
 
 export const useLoginMutation = () => {
     return useMutation({
+        //로그인은 인증 상태를 변경하는 작업이므로 mutation
         mutationFn: ({
                          email,
                          password,

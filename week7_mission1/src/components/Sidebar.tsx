@@ -55,12 +55,13 @@ export default function Sidebar({
 
                     <button
                         onClick={() => {
-                            const ok = confirm(
+                            const ok = confirm( //실수로 탈퇴하는 상황 방지 위해 confirm함수 이용
+                                //confirm 사용하면 확인, 취소 팝업 뜸 (확인: true, 취소: false)
                                 "정말 탈퇴하시겠습니까?"
                             );
 
                             if (ok) {
-                                deleteUserMutation.mutate();
+                                deleteUserMutation.mutate(); //회원 탈퇴는 서버 상태 변경 작업이므로 mutatio
                             }
                         }}
                         className="text-left hover:bg-gray-100 p-2 rounded-lg text-red-500"

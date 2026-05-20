@@ -7,15 +7,17 @@ export const useCreateLPMutation = (
 ) => {
     const queryClient = useQueryClient();
 
+    //서버 상태 변경 작업이므로 mutation
     return useMutation({
         mutationFn: createLP,
 
+        //LP 생성 성공 후 LP 목록 캐시를 무효화하여 최신 데이터 재조회
         onSuccess: () => {
-            queryClient.invalidateQueries({
+            queryClient.invalidateQueries({ //기존 캐시를 오래된 상태로 만들고 다시 서버 요청 보내
                 queryKey: ["lps"],
             });
 
-            onClose();
+            onClose(); //LP 생성 성공 시 모달 자동 닫힘
         },
     });
 };
