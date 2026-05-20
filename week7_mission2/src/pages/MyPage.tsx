@@ -15,7 +15,7 @@ export default function MyPage() {
         mutationFn: () =>
             instance.patch("/v1/users", { name, bio, avatar }),
 
-        // 서버 응답 전에 즉시 반영
+        // 서버 응답 전에 즉시 반영: onMutate
         onMutate: async () => {
             // 이전 값 저장 (롤백용)
             const previousName = localStorage.getItem("userName");
@@ -27,12 +27,14 @@ export default function MyPage() {
             return { previousName };
         },
 
+        // 성공 처리
         onSuccess: () => {
             alert("수정 완료");
         },
 
         // 실패 시 롤백
         onError: (_err, _vars, context) => {
+            // 아까 저장해둔 원래 값(previousName)으로 되돌리기
             if (context?.previousName) {
                 localStorage.setItem("userName", context.previousName);
                 queryClient.setQueryData(["userName"], context.previousName);
