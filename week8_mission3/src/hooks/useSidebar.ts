@@ -39,6 +39,20 @@ export default function useSidebar() {
         };
     }, [isOpen]);
 
+    // Sidebar 열리면 배경 스크롤 방지
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+
+        // cleanup
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, [isOpen]);
+
     return {
         isOpen,
         open,
