@@ -8,6 +8,7 @@ import instance from "../apis/axios";
 import { useLPListQuery } from "../hooks/queries/useLpQueries";
 import Layout from "../components/Layout";
 import useDebounce from "../hooks/useDebounce";
+import useThrottle from "../hooks/useThrottle";
 
 export default function LPListPage() {
     const navigate = useNavigate();
@@ -26,11 +27,15 @@ export default function LPListPage() {
     const [sort, setSort] =
         useState<"asc" | "desc">("desc");
     //검색 입력값
-    const [search, setSearch] =
-        useState("");
+    const [search, setSearch] = useState("");
+    // 현재 스크롤 위치 저장
+    const [scrollY, setScrollY] = useState(0);
+
+    // throttle 적용된 스크롤 값
+    const throttledScroll = useThrottle(scrollY, 1000);
+
     //사용자가 입력을 멈춘 뒤 300ms 후 실제 검색어 반영
-    const debouncedQuery =
-        useDebounce(search, 300);
+    const debouncedQuery = useDebounce(search, 300);
     //LP 목록 조회
     const {
         data,
@@ -83,6 +88,33 @@ export default function LPListPage() {
             observer.disconnect();
     }, [hasNextPage, fetchNextPage]);
 
+    // 스크롤 이벤트 감지
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrollY(window.scrollY);
+        };
+
+        window.addEventListener(
+            "scroll",
+            handleScroll
+        );
+
+        return () => {
+            window.removeEventListener(
+                "scroll",
+                handleScroll
+            );
+        };
+    }, []);
+
+    // throttle 적용 결과 확인
+    useEffect(() => {
+        console.log(
+            "Throttle 적용된 스크롤 위치:",
+            throttledScroll
+        );
+    }, [throttledScroll]);
+
     return (
         <Layout>
             <div className="min-h-screen">
@@ -96,7 +128,8 @@ export default function LPListPage() {
                                 e.target.value)
                         }
                         placeholder="LP 검색"
-                        className="w-full max-w-xl border p-3 rounded-lg"                    />
+                        className="w-full max-w-xl border p-3 rounded-lg"
+                    />
 
                     {/*정렬 버튼*/}
                     <div className="flex gap-2">
