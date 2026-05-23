@@ -2,6 +2,7 @@ import { useState } from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import LPModal from "./LPModal";
+import useSidebar from "../hooks/useSidebar";
 
 export default function Layout({
                                    children,
@@ -9,8 +10,12 @@ export default function Layout({
     children: React.ReactNode;
 }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
 
+    const {
+        isOpen,
+        close,
+        toggle,
+    } = useSidebar();
 
     const token = localStorage.getItem("accessToken");
 
@@ -27,7 +32,7 @@ export default function Layout({
             {/*헤더*/}
             <Navbar isLoggedIn={!!token}
                     onLogout={logout}
-                    onMenuClick={() => setIsOpen(true)}
+                    onMenuClick={toggle}
             />
 
 
@@ -35,7 +40,7 @@ export default function Layout({
                 {/*사이드바*/}
                 <Sidebar
                     isOpen={isOpen}
-                    onClose={() => setIsOpen(false)}
+                    onClose={close}
                 />
 
                 {/*메인*/}
